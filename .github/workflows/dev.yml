@@ -34,7 +34,7 @@ jobs:
         run: STAGE= npm run build
 
       - name: copy files to s3
-        run: aws s3 sync ./dist s3://reimbursement-client
+        run: aws s3 sync ./build s3://reimbursement-client
 
       - name: invalidate  cache
         run: |
