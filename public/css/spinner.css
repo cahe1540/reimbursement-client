@@ -1,0 +1,16 @@
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#spinner {
+  animation: spin infinite 1s linear;
+  color: rgb(112, 138, 172);
+  opacity: 60%;
+  font-size: 8rem;
+  margin-top: 7rem;
+}
