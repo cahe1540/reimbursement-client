@@ -1,0 +1,43 @@
+name: s3 deployment
+
+on:
+  push:
+    branches: [ main ] # the branch we want this to run on
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout repo 
+        name: actions/checkout@v2
+
+      - name: Node setup
+        uses: actions/setup-node@v1
+        with:
+          node-version: 17
+      
+      - name: Configure AWS
+        uses: aws-actions/configure-aws-credentials@v1
+        with: 
+          aws-access-key-id: ${{ secret.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secret.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-1
+      
+      - name: npm install
+        run: npm i
+
+      - name: build
+        run: npm i
+      
+      - name: build
+        run: STAGE= dev npm run build
+
+      - name: copy files to s3
+        run: aws s3 sync ./dist s3://reimbursement-client
+
+      - name: invalidate  cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id EW3OI3BGRHG6L \
+            --paths "/*"
